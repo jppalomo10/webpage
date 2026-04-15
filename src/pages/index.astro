@@ -8,15 +8,22 @@ import Layout from '../layouts/Layout.astro';
   ogDescription="Business Engineering student at UFM. Process automation, data analysis, and artificial intelligence."
 >
   <!-- Hero -->
-  <section class="cv-hero container--wide">
-    <h1 class="cv-hero__name">Juan Pablo<br />Palomo</h1>
-    <div class="cv-hero__sub">
-      <span class="es">Ingeniería Empresarial</span>
-      <span class="en">Business Engineering</span>
-      <span class="cv-hero__dot">·</span>
-      <span>Guatemala</span>
-    </div>
-  </section>
+  <div class="cv-hero-wrap">
+    <section class="cv-hero">
+      <div class="cv-hero__text">
+        <h1 class="cv-hero__name">Juan Pablo<br />Palomo</h1>
+        <div class="cv-hero__sub">
+          <span class="es">Ingeniería Empresarial</span>
+          <span class="en">Business Engineering</span>
+          <span class="cv-hero__dot">·</span>
+          <span>Guatemala</span>
+        </div>
+      </div>
+      <div class="cv-hero__avatar">
+        <img src="/foto.png" alt="Juan Pablo Palomo" />
+      </div>
+    </section>
+  </div>
 
   <!-- CV sections -->
   <div class="container--wide">

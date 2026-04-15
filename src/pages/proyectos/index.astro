@@ -27,10 +27,10 @@ const proyectos = (await getCollection('proyectos')).sort(
     <ul class="entry-list">
       {proyectos.map((proyecto) => (
         <li class="entry-item">
-          <h2 class="entry-item__title" style="pointer-events: none; cursor: default;">
+          <a href={`/proyectos/${proyecto.slug}`} class="entry-item__title">
             <span class="es">{proyecto.data.title}</span>
             <span class="en">{proyecto.data.titleEn ?? proyecto.data.title}</span>
-          </h2>
+          </a>
           <p class="entry-item__desc">
             <span class="es">{proyecto.data.description}</span>
             <span class="en">{proyecto.data.descriptionEn ?? proyecto.data.description}</span>
@@ -40,34 +40,9 @@ const proyectos = (await getCollection('proyectos')).sort(
               <span class="tag">{tech}</span>
             ))}
           </div>
-          {proyecto.data.github && (
-            <a
-              href={proyecto.data.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="project-github"
-            >
-              GitHub →
-            </a>
-          )}
         </li>
       ))}
     </ul>
   </div>
 </Layout>
 
-<style>
-  .project-github {
-    display: inline-block;
-    margin-top: 0.75rem;
-    font-size: 0.875rem;
-    color: var(--color-muted);
-    text-decoration: none;
-    letter-spacing: 0.02em;
-  }
-
-  .project-github:hover {
-    color: var(--color-fg);
-    text-decoration: none;
-  }
-</style>
