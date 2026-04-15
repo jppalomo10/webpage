@@ -1,0 +1,74 @@
+---
+title: "Automatización de Reportes con Python y Excel"
+titleEn: "Report Automation with Python and Excel"
+date: 2025-03-15
+description: "Cómo transformé un proceso manual de horas en un flujo automatizado de minutos usando Python y macros de Excel."
+descriptionEn: "How I turned a multi-hour manual process into an automated minutes-long flow using Python and Excel macros."
+tags: ["Python", "Excel", "Automatización"]
+---
+
+Cuando empecé en el mundo freelance, uno de mis primeros clientes necesitaba un reporte semanal que tardaba tres horas en completarse manualmente. Datos de múltiples fuentes, limpieza, consolidación, formato. Cada semana, lo mismo.
+
+La solución fue más simple de lo que parecía.
+
+## El problema
+
+El flujo original era así:
+
+1. Descargar datos de tres sistemas distintos (CSV, XLSX, base de datos)
+2. Copiar y pegar todo en una hoja maestra
+3. Aplicar fórmulas y formatos manualmente
+4. Enviar por correo
+
+Tres horas. Cada semana.
+
+## La solución con Python
+
+```python
+import pandas as pd
+import openpyxl
+from pathlib import Path
+
+
+def consolidar_reportes(ruta_datos: Path) -> pd.DataFrame:
+    """
+    Consolida datos de múltiples fuentes en un único DataFrame limpio.
+    """
+    ventas = pd.read_csv(ruta_datos / "ventas.csv")
+    inventario = pd.read_excel(ruta_datos / "inventario.xlsx")
+
+    # Estandarizar nombres de columnas
+    ventas.columns = ventas.columns.str.lower().str.strip()
+    inventario.columns = inventario.columns.str.lower().str.strip()
+
+    # Consolidar y limpiar
+    df = ventas.merge(inventario, on="sku", how="left")
+    df["fecha"] = pd.to_datetime(df["fecha"])
+
+    return df.sort_values("fecha", ascending=False)
+
+
+def generar_reporte(df: pd.DataFrame, destino: Path) -> None:
+    """Genera el reporte Excel formateado."""
+    with pd.ExcelWriter(destino, engine="openpyxl") as writer:
+        df.to_excel(writer, sheet_name="Resumen", index=False)
+
+        ws = writer.sheets["Resumen"]
+        for col in ws.iter_cols(min_row=1, max_row=1):
+            for cell in col:
+                cell.font = cell.font.copy(bold=True)
+
+
+if __name__ == "__main__":
+    datos = consolidar_reportes(Path("./datos"))
+    generar_reporte(datos, Path("./reporte_semanal.xlsx"))
+    print("Reporte generado.")
+```
+
+El script se dispara con un solo clic desde una macro de Excel que actúa como interfaz para el cliente.
+
+## Resultado
+
+El mismo proceso que tomaba tres horas ahora tarda menos de dos minutos. El cliente no necesita saber nada de Python — solo hace clic en un botón y el reporte aparece formateado y listo.
+
+La lección que me quedó: antes de automatizar, hay que entender completamente el proceso. La automatización no es magia — es sistematizar lo que ya sabías hacer.

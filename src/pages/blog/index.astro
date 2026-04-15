@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+---
+
+<Layout
+  title="Blog — Juan Pablo Palomo"
+  description="Artículos sobre automatización, análisis de datos y programación."
+  ogDescription="Articles on automation, data analysis, and programming."
+>
+  <div class="container">
+    <header class="page-header">
+      <p class="page-header__eyebrow">
+        <span class="es">Escritos</span>
+        <span class="en">Writing</span>
+      </p>
+      <h1 class="page-header__title">Blog</h1>
+    </header>
+
+    <ul class="entry-list">
+      {posts.map((post) => {
+        const dateEs = post.data.date.toLocaleDateString('es-GT', {
+          year: 'numeric', month: 'long', day: 'numeric',
+        });
+        const dateEn = post.data.date.toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric',
+        });
+        return (
+          <li class="entry-item">
+            <time class="entry-item__meta" datetime={post.data.date.toISOString()}>
+              <span class="es">{dateEs}</span>
+              <span class="en">{dateEn}</span>
+            </time>
+            <a href={`/blog/${post.slug}`} class="entry-item__title">
+              <span class="es">{post.data.title}</span>
+              <span class="en">{post.data.titleEn ?? post.data.title}</span>
+            </a>
+            <p class="entry-item__desc">
+              <span class="es">{post.data.description}</span>
+              <span class="en">{post.data.descriptionEn ?? post.data.description}</span>
+            </p>
+            {post.data.tags.length > 0 && (
+              <div class="entry-item__tags">
+                {post.data.tags.map((tag) => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</Layout>

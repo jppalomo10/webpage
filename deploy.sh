@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+git pull
+npm install
+npm run build

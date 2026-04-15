@@ -1,0 +1,68 @@
+---
+const path = Astro.url.pathname;
+
+function isActive(href: string) {
+  if (href === '/') return path === '/';
+  return path.startsWith(href);
+}
+---
+
+<nav class="nav" role="navigation" aria-label="Navegación principal">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="Juan Pablo Palomo">JPP</a>
+
+    <div class="nav__links">
+      <a href="/" aria-current={isActive('/') ? 'page' : undefined}>
+        <span class="es">Inicio</span>
+        <span class="en">Home</span>
+      </a>
+      <a href="/blog" aria-current={isActive('/blog') ? 'page' : undefined}>
+        Blog
+      </a>
+      <a href="/proyectos" aria-current={isActive('/proyectos') ? 'page' : undefined}>
+        <span class="es">Proyectos</span>
+        <span class="en">Projects</span>
+      </a>
+    </div>
+
+    <div class="nav__controls">
+      <button class="nav__btn" id="theme-toggle" aria-label="Cambiar tema">
+        <span id="theme-icon">○</span>
+      </button>
+      <button class="nav__btn" id="lang-toggle" aria-label="Cambiar idioma">
+        <span class="es">EN</span>
+        <span class="en">ES</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // ── Theme ──────────────────────────────────────────
+  const themeBtn = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+
+  function syncThemeIcon(theme: string) {
+    if (themeIcon) themeIcon.textContent = theme === 'dark' ? '●' : '○';
+  }
+
+  syncThemeIcon(document.documentElement.getAttribute('data-theme') ?? 'light');
+
+  themeBtn?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') ?? 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    syncThemeIcon(next);
+  });
+
+  // ── Language ───────────────────────────────────────
+  const langBtn = document.getElementById('lang-toggle');
+
+  langBtn?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-lang') ?? 'es';
+    const next = current === 'es' ? 'en' : 'es';
+    document.documentElement.setAttribute('data-lang', next);
+    localStorage.setItem('lang', next);
+  });
+</script>

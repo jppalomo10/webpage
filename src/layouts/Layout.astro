@@ -1,0 +1,64 @@
+---
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+}
+
+const {
+  title,
+  description = 'Juan Pablo Palomo — Ingeniería Empresarial, Guatemala',
+  ogTitle,
+  ogDescription,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" data-theme="light" data-lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Anti-FOUC: apply saved preferences before first paint -->
+    <script is:inline>
+      (function () {
+        var t = localStorage.getItem('theme') || 'light';
+        var l = localStorage.getItem('lang') || 'es';
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.setAttribute('data-lang', l);
+      })();
+    </script>
+
+    <!-- SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={ogTitle ?? title} />
+    <meta property="og:description" content={ogDescription ?? description} />
+    <meta property="og:locale" content="es_GT" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <Navbar />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

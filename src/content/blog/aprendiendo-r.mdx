@@ -1,0 +1,65 @@
+---
+title: "Por qué aprendí R para análisis de datos"
+titleEn: "Why I Learned R for Data Analysis"
+date: 2025-01-20
+description: "Mi experiencia aprendiendo R y cómo cambió mi forma de pensar sobre el análisis de datos."
+descriptionEn: "My experience learning R and how it changed the way I think about data analysis."
+tags: ["R", "Análisis de Datos", "Aprendizaje"]
+---
+
+Cuando empecé a programar, Python fue mi primera opción. Es versátil, tiene una comunidad enorme, y sirve para casi todo. Entonces, ¿por qué aprender R?
+
+La respuesta corta: porque R está diseñado específicamente para estadística y análisis de datos, y esa diferencia se nota.
+
+## Lo que Python hace bien (y sus límites para análisis)
+
+Python es una navaja suiza. Puedes construir webapps, automatizar tareas del sistema, entrenar modelos de ML. Pero para análisis estadístico puro, la sintaxis puede volverse verbosa rápidamente.
+
+```python
+# Análisis básico con pandas
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("ventas.csv")
+resumen = df.groupby("categoria")["ventas"].agg(["sum", "mean", "std"])
+resumen.plot(kind="bar", figsize=(10, 6))
+plt.title("Ventas por categoría")
+plt.tight_layout()
+plt.show()
+```
+
+Funciona bien. Pero R lo expresa de una forma más elegante y cercana al pensamiento analítico.
+
+## R y el tidyverse
+
+El tidyverse es un conjunto de paquetes que transforman R en algo que se lee casi como lenguaje natural.
+
+```r
+library(tidyverse)
+
+ventas <- read_csv("ventas.csv")
+
+ventas |>
+  group_by(categoria) |>
+  summarise(
+    total    = sum(ventas),
+    promedio = mean(ventas),
+    desv     = sd(ventas)
+  ) |>
+  ggplot(aes(x = reorder(categoria, -total), y = total)) +
+  geom_col(fill = "#1a1a17") +
+  theme_minimal(base_size = 13) +
+  labs(
+    title = "Ventas por categoría",
+    x     = NULL,
+    y     = "Total de ventas"
+  )
+```
+
+El operador `|>` encadena operaciones de manera que el código se lee de arriba hacia abajo, como un relato. Una vez que entiendes `dplyr` y `ggplot2`, leer código R es como leer un análisis escrito.
+
+## Mi conclusión
+
+No es una competencia. Uso Python para automatización, producción y webapps. Uso R para exploración estadística y visualizaciones complejas donde la gramática de ggplot brilla.
+
+Son herramientas complementarias. Si trabajas con datos y solo conoces una, aprende la otra. La inversión vale.

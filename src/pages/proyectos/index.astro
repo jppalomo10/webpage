@@ -1,0 +1,73 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const proyectos = (await getCollection('proyectos')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+---
+
+<Layout
+  title="Proyectos — Juan Pablo Palomo"
+  description="Proyectos de automatización de procesos, análisis de datos y desarrollo de herramientas."
+  ogDescription="Projects in process automation, data analysis, and tool development."
+>
+  <div class="container">
+    <header class="page-header">
+      <p class="page-header__eyebrow">
+        <span class="es">Trabajo selecto</span>
+        <span class="en">Selected work</span>
+      </p>
+      <h1 class="page-header__title">
+        <span class="es">Proyectos</span>
+        <span class="en">Projects</span>
+      </h1>
+    </header>
+
+    <ul class="entry-list">
+      {proyectos.map((proyecto) => (
+        <li class="entry-item">
+          <h2 class="entry-item__title" style="pointer-events: none; cursor: default;">
+            <span class="es">{proyecto.data.title}</span>
+            <span class="en">{proyecto.data.titleEn ?? proyecto.data.title}</span>
+          </h2>
+          <p class="entry-item__desc">
+            <span class="es">{proyecto.data.description}</span>
+            <span class="en">{proyecto.data.descriptionEn ?? proyecto.data.description}</span>
+          </p>
+          <div class="entry-item__tags">
+            {proyecto.data.stack.map((tech) => (
+              <span class="tag">{tech}</span>
+            ))}
+          </div>
+          {proyecto.data.github && (
+            <a
+              href={proyecto.data.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="project-github"
+            >
+              GitHub →
+            </a>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</Layout>
+
+<style>
+  .project-github {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .project-github:hover {
+    color: var(--color-fg);
+    text-decoration: none;
+  }
+</style>
